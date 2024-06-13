@@ -161,3 +161,4 @@ await helper.sendClaim(0n, proof);
 
 The cell containing dictionary must be stored in some reliable place. It can be your own server, some cloud storage or even TON Storage.
 Make sure to not lose both original list and the cell dictionary at the same time because you will not be able to recover them.
+# airdrop

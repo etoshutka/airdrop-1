@@ -1,13 +1,13 @@
 import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, toNano } from '@ton/core';
 import { AirdropEntry } from './Airdrop';
 
-export type AirdropHelperConfig = {
-    airdrop: Address;
-    proofHash: Buffer;
-    index: bigint;
+export type AirdropHelperConfig = {  // наш конфиг 
+    airdrop: Address; // адрес задеплоеного контракта аирдропа
+    proofHash: Buffer; // пруф
+    index: bigint; // индекс
 };
 
-export function airdropHelperConfigToCell(config: AirdropHelperConfig): Cell {
+export function airdropHelperConfigToCell(config: AirdropHelperConfig): Cell { // формируем ячейку(Cell) из конфига
     return beginCell()
         .storeBit(false)
         .storeAddress(config.airdrop)
@@ -16,7 +16,7 @@ export function airdropHelperConfigToCell(config: AirdropHelperConfig): Cell {
         .endCell();
 }
 
-export class AirdropHelper implements Contract {
+export class AirdropHelper implements Contract { // наш класс с функциями
     constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
 
     static createFromAddress(address: Address) {
@@ -29,21 +29,21 @@ export class AirdropHelper implements Contract {
         return new AirdropHelper(contractAddress(workchain, init), init);
     }
 
-    async sendDeploy(provider: ContractProvider, via: Sender) {
+    async sendDeploy(provider: ContractProvider, via: Sender) { // деплой контракта клейма
         await provider.internal(via, {
-            value: toNano('0.15'),
+            value: toNano('0.15'), // сколько будет передано на контракт клейма( Не рекомендую менять)
         });
     }
 
     async sendClaim(provider: ContractProvider, queryId: bigint, proof: Cell) {
         await provider.external(beginCell().storeUint(queryId, 64).storeRef(proof).endCell());
-    }
+    } // клейм, тут же проверка merkle proof
 
     async getClaimed(provider: ContractProvider): Promise<boolean> {
         if ((await provider.getState()).state.type == 'uninit') {
             return false;
         }
         const stack = (await provider.get('get_claimed', [])).stack;
-        return stack.readBoolean();
+        return stack.readBoolean(); // гет метод показывающий клеймил ли пользователь жетоны, позволит избежать множественного клейма
     }
 }

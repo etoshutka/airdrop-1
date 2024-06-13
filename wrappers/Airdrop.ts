@@ -12,12 +12,12 @@ import {
     Slice,
 } from '@ton/core';
 
-export type AirdropConfig = {
+export type AirdropConfig = { // формируем тип
     merkleRoot: bigint;
     helperCode: Cell;
 };
 
-export function airdropConfigToCell(config: AirdropConfig): Cell {
+export function airdropConfigToCell(config: AirdropConfig): Cell { // собираем предыдущий тип в ячейку
     return beginCell()
         .storeUint(0, 2)
         .storeUint(config.merkleRoot, 256)
@@ -26,12 +26,12 @@ export function airdropConfigToCell(config: AirdropConfig): Cell {
         .endCell();
 }
 
-export type AirdropEntry = {
+export type AirdropEntry = { // тип для словаря(списка) участвующих
     address: Address;
     amount: bigint;
 };
 
-export const airdropEntryValue = {
+export const airdropEntryValue = { // для словаря
     serialize: (src: AirdropEntry, buidler: Builder) => {
         buidler.storeAddress(src.address).storeCoins(src.amount);
     },
@@ -43,7 +43,7 @@ export const airdropEntryValue = {
     },
 };
 
-export function generateEntriesDictionary(entries: AirdropEntry[]): Dictionary<bigint, AirdropEntry> {
+export function generateEntriesDictionary(entries: AirdropEntry[]): Dictionary<bigint, AirdropEntry> { // генерируем список участвуюзих(индекс с типом Bigint, константа airdropEntryValue )
     let dict: Dictionary<bigint, AirdropEntry> = Dictionary.empty(Dictionary.Keys.BigUint(256), airdropEntryValue);
 
     for (let i = 0; i < entries.length; i++) {
@@ -53,7 +53,7 @@ export function generateEntriesDictionary(entries: AirdropEntry[]): Dictionary<b
     return dict;
 }
 
-export class Airdrop implements Contract {
+export class Airdrop implements Contract { // наш класс с функциями( здесь только деплой)
     constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
 
     static createFromAddress(address: Address) {
@@ -70,7 +70,7 @@ export class Airdrop implements Contract {
         await provider.internal(via, {
             value,
             sendMode: SendMode.PAY_GAS_SEPARATELY,
-            body: beginCell().storeUint(0x610ca46c, 32).storeUint(0, 64).storeAddress(jettonWallet).endCell(),
+            body: beginCell().storeUint(0x610ca46c, 32).storeUint(0, 64).storeAddress(jettonWallet).endCell(), // деплоим, в ячейке сохраняем op code деплоя, query_id(любой) , адрес мастер-кошелька жетона который планируем раздавать
         });
     }
 }

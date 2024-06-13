@@ -1,4 +1,4 @@
-import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
+import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode, TupleBuilder } from '@ton/core';
 
 export type JettonMinterConfig = {
     admin: Address;
@@ -68,11 +68,11 @@ export class JettonMinter implements Contract {
     }
 
     async getWalletAddressOf(provider: ContractProvider, address: Address) {
-        return (
-            await provider.get('get_wallet_address', [
-                { type: 'slice', cell: beginCell().storeAddress(address).endCell() },
-            ])
-        ).stack.readAddress();
+        const tuple_builder = new TupleBuilder();
+        tuple_builder.writeAddress(address);
+        const { stack } = await provider.get('get_wallet_address', tuple_builder.build());
+
+        return stack.readAddress();
     }
 
     async getWalletCode(provider: ContractProvider) {
