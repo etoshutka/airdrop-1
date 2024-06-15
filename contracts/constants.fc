@@ -2,6 +2,12 @@ const int op::deploy = 0x610ca46c;
 const int op::process_claim = 0x43c7d5c9;
 const int op::jetton::transfer = 0x0f8a7ea5;
 
+
+const int op::deploy_for_ton = 0x43c7d5c2;
+const int op::process_claim_for_ton = 0x43c7d5c1;
+const int op::ton::transfer = 0x0f8a7ea1;
+
+
 const int error::already_claimed = 702;
 const int error::wrong_sender = 703;
 const int error::not_enough_coins = 704;

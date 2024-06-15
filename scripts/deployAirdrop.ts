@@ -6,7 +6,7 @@ import { JettonMinter } from '../wrappers/JettonMinter';
 export async function run(provider: NetworkProvider) { 
     const entries: AirdropEntry[] = [ // составление списка для формирования меркла(кто сможет заклеймить и сколько)
         {
-            address: Address.parse('UQCR5jSUxzbfufIryjW92REmWHmabN57bLZWFhYQYuNogHrP'), // адрес клеймера
+            address: Address.parse('UQDlyGIved5xvnBXLxTeUs0ZN2q-2UafjwYVr9dHz5ElURpi'), // адрес клеймера
             amount: toNano('0.00025'), // кол-во жеттонов (здесь 0.25 USDT)
         },
         {

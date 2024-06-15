@@ -26,7 +26,7 @@ export function airdropConfigToCell(config: AirdropConfig): Cell { // собир
         .endCell();
 }
 
-export type AirdropEntry = { // тип для словаря(списка) участвующих
+export type AirdropEntry = { // тип для словаряx(списка) участвующих
     address: Address;
     amount: bigint;
 };
